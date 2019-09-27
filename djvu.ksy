@@ -7,10 +7,18 @@ seq:
     type: signature
   - id: form
     type: form
-instances:
-  file:
-    pos: 2286
-    type: form
+#instances:
+#  file:
+#    pos: 2286
+#    type: form
+
+#instances:
+#  file_bodies:
+#    pos: ofs_files[_index]
+#    size: len_files[_index]
+#    repeat: expr
+#    repeat-expr: chunk.dirm.nfiles
+
 types:
   signature:
     seq:
@@ -27,7 +35,7 @@ types:
   chunk:
     seq:
     - id: chunk_type
-      type: strz
+      type: str
       encoding: ascii
       size: 8
     - id: len
@@ -39,6 +47,7 @@ types:
         cases:
           '"DJVUINFO"': info
           '"DJVMDIRM"': dirm
+          '"DJVIDjbz"': djbz
   dirm: # Page 12
     seq:
       - id: bundled
@@ -47,10 +56,27 @@ types:
         type: b7
       - id: nfiles
         type: u2
-      - id: offset
+      - id: offsets
         type: u4
         repeat: expr
-        repeat-expr: nfiles
+        repeat-expr: 2 # nfiles
+    instances:
+      files:
+        io: _root._io
+        #pos: offsets[_index]
+        pos: offsets[0]
+        type: form
+        #size: offsets[_index + 1] - offsets[_index]
+        repeat: expr
+        repeat-expr: 2 #nfiles - 1
+      poop:
+        io: _root._io
+        pos: offsets[1]
+        type: form
+  djbz: # Shared shape table
+    seq:
+      - id: poop
+        type: u4
   info: # Page 24
     seq:
       - id: width
