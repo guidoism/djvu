@@ -7,18 +7,6 @@ seq:
     type: signature
   - id: form
     type: form
-#instances:
-#  file:
-#    pos: 2286
-#    type: form
-
-#instances:
-#  file_bodies:
-#    pos: ofs_files[_index]
-#    size: len_files[_index]
-#    repeat: expr
-#    repeat-expr: chunk.dirm.nfiles
-
 types:
   signature:
     seq:
@@ -66,7 +54,6 @@ types:
         #pos: offsets[_index]
         pos: offsets[0]
         type: form
-        #size: offsets[_index + 1] - offsets[_index]
         repeat: expr
         repeat-expr: 2 #nfiles - 1
       poop:
@@ -76,7 +63,8 @@ types:
   djbz: # Shared shape table
     seq:
       - id: poop
-        type: u4
+        type: u1
+        repeat: eos
   info: # Page 24
     seq:
       - id: width
@@ -100,8 +88,3 @@ types:
         #  6 – 90° Counter Clockwise
         #  2 – 180° (unside down)
         #  5 – 90° Clockwise
-
-      #- id: poop
-      #  type: u1
-      #  repeat: eos
-        
